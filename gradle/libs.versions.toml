@@ -5,92 +5,30 @@ spring-stream = "4.1.3"
 spring-kafka = "3.2.4"
 spring-data-elasticsearch = "5.2.11"
 spring-dependency-management-plugin = "1.1.6"
-spring-ldap-core = "3.2.8"
-spotless-plugin = "6.25.0"
 kotlin-plugin = "2.0.20"
 kotlin-coroutines = "1.9.0"
 kotlin-reactor-extensions = "1.2.3"
 kotlin-logging = "3.0.5"
 kotlin-jackson-module = "2.17.2"
-logstash-logback-encoder = "8.0"
-logback-kafka-appender = "0.2.0-RC2"
-micrometer = "1.13.4"
-micrometer-tracing = "1.3.4"
 reactor-tools = "3.6.10"
-uuid-generator = "5.1.0"
-thymeleaf = "3.1.2.RELEASE"
-jaxb-api = "2.3.1"
-snakeyaml = "2.2"
-hazelcast = "5.3.6"
-reactor-extra = "3.5.1"
-jakarta-json = "2.1.3"
-apache-commons-lang3 = "3.17.0"
-my-orders-service = "3.12.13-release"
-event-sourcing-service = "3.12.13-release"
-audit-log-service = "4.10.28-jdk-21"
-shedlock = "5.10.2"
-jnanoid = "2.0.0"
-reactor-test = "3.6.12"
-junit = "5.11.3"
-mockito-kotlin = "5.2.1"
-test-containers = "1.19.3"
-user-settings-service = "5.4.24-release"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot"}
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management-plugin"}
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin"}
 kotlin-jvm = { id = "jvm", version.ref = "kotlin-plugin"}
 kotlin-spring = { id = "plugin.spring", version.ref = "kotlin-plugin"}
 
 [libraries]
 spring-boot-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux", version.ref = "spring-boot"}
-spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "spring-boot"}
-spring-boot-starter-mail = { group = "org.springframework.boot", name = "spring-boot-starter-mail", version.ref = "spring-boot"}
-spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools", version.ref = "spring-boot"}
 spring-cloud-starter-bootstrap = { group = "org.springframework.cloud", name = "spring-cloud-starter-bootstrap", version.ref = "spring-cloud"}
 spring-cloud-stream-binder-kafka-streams = { group = "org.springframework.cloud", name = "spring-cloud-stream-binder-kafka-streams", version.ref = "spring-stream"}
 spring-cloud-stream-binder-kafka = { group = "org.springframework.cloud", name = "spring-cloud-stream-binder-kafka", version.ref = "spring-stream"}
 spring-kafka = { group = "org.springframework.kafka", name = "spring-kafka", version.ref = "spring-kafka"}
 spring-data-elasticsearch = { group = "org.springframework.data", name = "spring-data-elasticsearch", version.ref = "spring-data-elasticsearch"}
-spring-data-ldap = { group = "org.springframework.data", name = "spring-data-ldap", version.ref = "spring-boot"}
-spring-data-cassandra = { group = "org.springframework.boot", name = "spring-boot-starter-data-cassandra-reactive", version.ref = "spring-boot"}
-spring-ldap-core = { group = "org.springframework.ldap", name = "spring-ldap-core", version.ref = "spring-ldap-core" }
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin-plugin"}
 kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin-plugin"}
 kotlin-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlin-coroutines"}
 kotlin-reactor-extensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version.ref = "kotlin-reactor-extensions"}
 kotlin-logging = { group = "io.github.microutils", name = "kotlin-logging", version.ref = "kotlin-logging"}
 kotlin-jackson-module = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "kotlin-jackson-module"}
-kotlin-jackson-yaml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version.ref = "kotlin-jackson-module"}
-logstash-logback-encoder = { group = "net.logstash.logback", name = "logstash-logback-encoder", version.ref = "logstash-logback-encoder"}
-logback-kafka-appender = { group = "com.github.danielwegener", name = "logback-kafka-appender", version.ref = "logback-kafka-appender"}
-micrometer-registry-jmx = { group = "io.micrometer", name = "micrometer-registry-jmx", version.ref = "micrometer"}
-micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus", version.ref = "micrometer"}
-micrometer-tracing = { group = "io.micrometer", name = "micrometer-tracing", version.ref = "micrometer-tracing"}
 reactor-tools = { group = "io.projectreactor", name = "reactor-tools", version.ref = "reactor-tools"}
-uuid-generator = { group = "com.fasterxml.uuid", name = "java-uuid-generator", version.ref = "uuid-generator"}
-thymeleaf = { group = "org.thymeleaf", name = "thymeleaf", version.ref = "thymeleaf"}
-thymeleaf-spring6 = { group = "org.thymeleaf", name = "thymeleaf-spring6", version.ref = "thymeleaf"}
-jaxb-api = { group = "javax.xml.bind", name = "jaxb-api", version.ref = "jaxb-api"}
-snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
-jakarta-json = { group = "jakarta.json", name = "jakarta.json-api", version.ref = "jakarta-json" }
-apache-commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "apache-commons-lang3"}
-hazelcast-spring = { group = "com.hazelcast", name = "hazelcast-spring", version.ref = "hazelcast" }
-reactor-extra = { group = "io.projectreactor.addons", name = "reactor-extra", version.ref = "reactor-extra"}
-my-orders-service = { group = "com.pl.tech.ing.gsoc", name = "my-orders-service-plugin", version.ref = "my-orders-service"}
-event-sourcing-service = { group = "com.pl.tech.ing.gsoc", name = "event-sourcing-plugin",  version.ref = "event-sourcing-service" }
-audit-log-service = { group = "com.pl.tech.ing.gsoc", name = "audit-log-plugin", version.ref = "audit-log-service" }
-shedlock = { group = "net.javacrumbs.shedlock", name = "shedlock-spring", version.ref = "shedlock" }
-shedlock-elastic-lock-provider = { group = "net.javacrumbs.shedlock", name = "shedlock-provider-elasticsearch8", version.ref = "shedlock" }
-jnanoid = { group = "com.aventrix.jnanoid", name = "jnanoid", version.ref = "jnanoid"}
-spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "spring-boot" }
-reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactor-test" }
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
-mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
-test-containers = { group = "org.testcontainers", name = "testcontainers", version.ref = "test-containers" }
-test-containers-cassandra = { group = "org.testcontainers", name = "cassandra", version.ref = "test-containers" }
-test-containers-elasticsearch = { group = "org.testcontainers", name = "elasticsearch", version.ref = "test-containers" }
-test-containers-kafka = { group = "org.testcontainers", name = "kafka", version.ref = "test-containers" }
-test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter", version.ref = "test-containers" }
-user-settings-service = { group = "com.pl.tech.ing.gsoc", name = "P03043-GSOC-user-settings-service", version.ref = "user-settings-service" }
