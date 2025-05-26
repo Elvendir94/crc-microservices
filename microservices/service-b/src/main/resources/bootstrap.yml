@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: crc-service-b
+  cloud:
+    stream:
+      kafka:
+        binder:
+          min-partition-count: 1
+          transaction:
+            producer:
+              compression-type: gzip
+  lifecycle:
+    timeout-per-shutdown-phase: 30s #Timeout for graceful shutdown
+
+server:
+  shutdown: graceful
+  port: 8083
