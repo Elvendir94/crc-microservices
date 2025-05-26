@@ -7,9 +7,14 @@ RUN yum -y upgrade \
     && yum -y remove python-urllib3 \
     && java --version \
 
+RUN useradd -ms /bin/bash buildUser
+USER buildUser
+
 ARG JAR_FILE=build/libs/service-b.jar
 COPY ${JAR_FILE} /service-b.jar
 
 ENTRYPOINT ["java","-Duser.timezone=UTC", "-XX:MaxRAMPercentage=80.0","-Xms128m","-XX:+CompactStrings","-XX:TieredStopAtLevel=1","-XX:+UseSerialGC","-Xlog:gc=info","-jar", "./service-b.jar"]
 
-EXPOSE 8080
+EXPOSE 8083
+
+# docker run -e spring.profiles.active=local,kafka_binding --network host --user 1001 service-b
