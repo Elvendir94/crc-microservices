@@ -18,15 +18,6 @@ import java.util.function.Function
 internal class ApplicationConfiguration {
 
 //    @Bean
-//    fun microserviceBResponseConsumer(
-//        stateStoreRepository: StateStoreRepository,
-//        domainObjectRepository: DomainObjectRepository,
-//        objectMapper: ObjectMapper
-//    ): MicroserviceBResponseConsumer {
-//        return MicroserviceBResponseConsumer(stateStoreRepository, domainObjectRepository, objectMapper)
-//    }
-//
-//    @Bean
 //    fun microserviceBResponse(
 //        microserviceBResponseConsumer: MicroserviceBResponseConsumer
 //    ): Consumer<Flux<Message<Map<String, Any?>>>> {

@@ -14,4 +14,3 @@ spring:
 
 server:
   shutdown: graceful
-  port: 8081
