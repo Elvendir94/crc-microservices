@@ -6,6 +6,10 @@ spring:
           destination: crc_topic_response
           group: crc-service-a
           binder: kafka-crc
+        microserviceBResponse-out-0:
+          destination: service-a-to-service-c-topic
+          group: crc-service-a
+          binder: kafka-crc
         webRequest-in-0:
           destination: crc_topic_web_request
           group: crc-service-a

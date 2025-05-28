@@ -4,6 +4,7 @@ package com.pl.ing.crc.service.infrastructure.configuration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pl.ing.crc.service.domain.kafka.MicroserviceBResponseConsumer
 import com.pl.ing.crc.service.domain.kafka.WebRequestProcessor
+import com.pl.ing.crc.service.domain.model.elasticsearch.DomainObject
 import com.pl.ing.crc.service.domain.model.kafka.MessageToMicroB
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.DomainObjectRepository
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.StateStoreRepository
@@ -20,16 +21,22 @@ internal class ApplicationConfiguration {
     @Bean
     fun microserviceBResponseConsumer(
         stateStoreRepository: StateStoreRepository,
-        domainObjectRepository: DomainObjectRepository,
         objectMapper: ObjectMapper
     ): MicroserviceBResponseConsumer {
-        return MicroserviceBResponseConsumer(stateStoreRepository, domainObjectRepository, objectMapper)
+        return MicroserviceBResponseConsumer(stateStoreRepository, objectMapper)
     }
+
+//    @Bean
+//    fun microserviceBResponse(
+//        microserviceBResponseConsumer: MicroserviceBResponseConsumer
+//    ): Consumer<Flux<Message<Map<String, Any?>>>> {
+//        return microserviceBResponseConsumer.process()
+//    }
 
     @Bean
     fun microserviceBResponse(
         microserviceBResponseConsumer: MicroserviceBResponseConsumer
-    ): Consumer<Flux<Message<Map<String, Any?>>>> {
+    ): Function<Flux<Message<Map<String, Any?>>>, Flux<DomainObject>> {
         return microserviceBResponseConsumer.process()
     }
 
