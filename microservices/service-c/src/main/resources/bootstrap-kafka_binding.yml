@@ -1,0 +1,18 @@
+spring: #TODO: zmienic
+  cloud:
+    stream:
+      bindings:
+        microserviceBResponse-in-0:
+          destination: crc_topic_response
+          group: crc-service-a
+          binder: kafka-crc
+        webRequest-in-0:
+          destination: crc_topic_web_request
+          group: crc-service-a
+          binder: kafka-crc
+        webRequest-out-0:
+          destination: crc_topic
+          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: microserviceBResponse;webRequest
