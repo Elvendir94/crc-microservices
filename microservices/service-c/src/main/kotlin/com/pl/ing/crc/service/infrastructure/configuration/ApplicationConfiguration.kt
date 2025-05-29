@@ -32,35 +32,4 @@ internal class ApplicationConfiguration {
     ): Consumer<Flux<Message<Map<String, Any?>>>> {
         return microserviceASaveRequestConsumer.process()
     }
-
-//    @Bean
-//    fun microserviceBResponseConsumer(
-//        stateStoreRepository: StateStoreRepository,
-//        domainObjectRepository: DomainObjectRepository,
-//        objectMapper: ObjectMapper
-//    ): MicroserviceBResponseConsumer {
-//        return MicroserviceBResponseConsumer(stateStoreRepository, domainObjectRepository, objectMapper)
-//    }
-
-//    @Bean
-//    fun microserviceBResponse(
-//        microserviceBResponseConsumer: MicroserviceBResponseConsumer
-//    ): Consumer<Flux<Message<Map<String, Any?>>>> {
-//        return microserviceBResponseConsumer.process()
-//    }
-//
-//    @Bean
-//    fun webRequestProcessor(
-//        stateStoreRepository: StateStoreRepository,
-//        objectMapper: ObjectMapper
-//    ): WebRequestProcessor {
-//        return WebRequestProcessor(stateStoreRepository, objectMapper)
-//    }
-//
-//    @Bean
-//    fun webRequest(
-//        webRequestProcessor: WebRequestProcessor
-//    ): Function<Flux<Message<Map<String, Any?>>>, Flux<MessageToMicroB>> {
-//        return webRequestProcessor.process()
-//    }
 }
