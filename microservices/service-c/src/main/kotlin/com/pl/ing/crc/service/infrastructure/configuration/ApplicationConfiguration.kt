@@ -3,7 +3,6 @@ package com.pl.ing.crc.service.infrastructure.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pl.ing.crc.service.domain.kafka.MicroserviceCProcessor
-import com.pl.ing.crc.service.domain.model.kafka.MessageToMicroA
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.DomainObjectRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
