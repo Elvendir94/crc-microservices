@@ -29,14 +29,14 @@ internal class WebRequestProcessor(
             .doOnNext {
                 logger.info { "Put some processing here." }
             }
-            .flatMap {
-                stateStoreRepository.save(it)
-            }.map {
+            .map {
                 it.eventBody
-            }.doOnNext {
+            }
+            .doOnNext {
                 logger.info { "Sending message to micro B" }
             }
     }
 
     companion object : KLogging()
 }
+

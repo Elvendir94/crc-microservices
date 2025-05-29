@@ -40,3 +40,5 @@ out/
 ### statestores ###
 statedir
 teststatedir
+
+build.gradle.kts
