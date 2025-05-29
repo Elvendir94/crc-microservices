@@ -3,7 +3,7 @@ spring:
     stream:
       bindings:
         microserviceARequest-in-0:
-          destination: crc_topic_response
+          destination: crc_topic_to_save
           group: crc-service-c
           binder: kafka-crc
       default-binder: kafka-crc
