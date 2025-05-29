@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    function:
+      definition: domainObjectSink
+    stream:
+      bindings:
+        domainObjectSink-in-0:
+          content-type: application/json
+          destination: service-c-topic
+          group: crc-service-c
