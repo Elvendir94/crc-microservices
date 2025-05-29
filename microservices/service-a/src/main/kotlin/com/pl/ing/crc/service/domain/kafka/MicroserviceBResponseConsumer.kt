@@ -6,22 +6,21 @@ import com.pl.ing.crc.service.domain.model.elasticsearch.DomainObject
 import com.pl.ing.crc.service.domain.model.elasticsearch.EventDTO
 import com.pl.ing.crc.service.domain.model.kafka.MessageFromMicroB
 import com.pl.ing.crc.service.domain.model.kafka.MessageToMicroB
-import com.pl.ing.crc.service.domain.repositories.elasticsearch.DomainObjectRepository
+import com.pl.ing.crc.service.domain.model.kafka.MessageToServiceC
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.StateStoreRepository
 import mu.KLogging
 import org.springframework.messaging.Message
+import org.springframework.messaging.support.MessageBuilder
 import reactor.core.publisher.Flux
 import java.time.Instant
-import java.util.function.Consumer
 import java.util.function.Function
 
 internal class MicroserviceBResponseConsumer(
     private val stateStoreRepository: StateStoreRepository,
-    private val domainObjectRepository: DomainObjectRepository,
     private val objectMapper: ObjectMapper
 ) {
 
-    fun process(): Consumer<Flux<Message<Map<String, Any?>>>> = Consumer { input ->
+    fun process(): Function<Flux<Message<Map<String, Any?>>>, Flux<Message<MessageToServiceC>>> = Function { input ->
         input
             .map { message ->
                 EventDTO(
@@ -40,20 +39,28 @@ internal class MicroserviceBResponseConsumer(
                     .filter { it.aggregateId == eventDto.aggregateId }
                     .sort { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
                     .collectList()
-                    .map {
+                    .flatMap { events ->
                         // Merge events from list into single event (based on business logic)
-                        val objectToCorrect = it.last()
+                        val objectToCorrect = events.last()
+                        val domainObject = DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
 
-                        DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
-                    }.flatMap { domainObject ->
-                        domainObjectRepository.save(domainObject) // TODO: Moved to README.adoc in root dir
-                    }.flatMap {
+                        // Save the event dto to state store
                         stateStoreRepository.save(eventDto)
+                            .map { domainObject }
                     }
             }
+            .map { domainObject ->
+                // Create a message for service-c with DomainObject data
+                val messageToServiceC = MessageToServiceC(
+                    domainObject.id,
+                    domainObject.fieldA,
+                    domainObject.fieldB
+                )
+                MessageBuilder.withPayload(messageToServiceC).build()
+            }
             .doOnNext {
-                logger.info { "Fixed values for fieldA and fieldB. New values ${it.eventBody.fieldA} | ${it.eventBody.fieldB}" }
-            }.subscribe()
+                logger.info { "Sending domain object to service-c with id: ${it.payload.id}, fieldA: ${it.payload.fieldA}, fieldB: ${it.payload.fieldB}" }
+            }
     }
 
     companion object : KLogging()
