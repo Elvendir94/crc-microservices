@@ -6,9 +6,11 @@ spring:
           destination: crc_topic
           group: crc-service-b
           binder: kafka-crc
+          contentType: application/json
         microserviceARequest-out-0:
           destination: crc_topic_response
           binder: kafka-crc
+          contentType: application/json
       default-binder: kafka-crc
     function:
       definition: microserviceARequest

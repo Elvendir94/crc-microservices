@@ -6,6 +6,11 @@ spring:
           destination: crc_topic_response
           group: crc-service-a
           binder: kafka-crc
+          contentType: application/json
+        microserviceBResponse-out-0:
+          destination: domain-object-topic
+          binder: kafka-crc
+          contentType: application/json
         webRequest-in-0:
           destination: crc_topic_web_request
           group: crc-service-a
@@ -13,6 +18,7 @@ spring:
         webRequest-out-0:
           destination: crc_topic
           binder: kafka-crc
+          contentType: application/json
       default-binder: kafka-crc
     function:
       definition: microserviceBResponse;webRequest

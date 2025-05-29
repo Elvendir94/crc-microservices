@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        processDomainObjectFromA-in-0:
+          destination: domain-object-topic
+          group: service-c-group
+          binder: kafka-crc
+          contentType: application/json
+      default-binder: kafka-crc
+    function:
+      definition: processDomainObjectFromA
