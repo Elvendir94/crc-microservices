@@ -18,7 +18,6 @@ internal class MicroserviceARequestConsumer(
     private val domainObjectRepository: DomainObjectRepository,
     private val objectMapper: ObjectMapper
 ) {
-//TODO
     fun process(): Consumer<Flux<Message<Map<String, Any?>>>> = Consumer { input ->
         input
             .map { message ->
@@ -29,10 +28,7 @@ internal class MicroserviceARequestConsumer(
                     Instant.now().toEpochMilli()
                 )
             }
-            .filter { true } // Add any filtering logic if needed
-            .doOnNext {
-                logger.info { "Put some processing here." }
-            }
+            .filter { true }
             .flatMap { eventDto ->
                 stateStoreRepository.findAll()
                     .filter { it.aggregateId == eventDto.aggregateId }
@@ -44,7 +40,7 @@ internal class MicroserviceARequestConsumer(
 
                         DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
                     }.flatMap { domainObject ->
-                        domainObjectRepository.save(domainObject) // TODO: Moved to README.adoc in root dir
+                        domainObjectRepository.save(domainObject)
                     }.flatMap {
                         stateStoreRepository.save(eventDto)
                     }
