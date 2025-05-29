@@ -37,15 +37,18 @@ internal class MicroserviceARequestConsumer(
             }
             .filter { true }
             .flatMap { eventDto ->
-                stateStoreRepository.findAll()
+                stateStoreRepository.findAll()  //nie wiem dlaczego tutaj nie znajduje zadnego obiektu, jezeli w linii 46 nie zrobie lastOrNull mam blad z pusta lista. Dlatego ponizej mam sprawdzenie czy jest jakikolwiek obiekt, jezeli tak, to go zapisuje, jezeli znasz odpowiedz na to, to daj proszę znac
                     .filter { it.aggregateId == eventDto.aggregateId }
                     .sort { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
                     .collectList()
                     .map {
                         // Merge events from list into single event (based on business logic)
-                        val objectToCorrect = it.last()
+                        val objectToCorrect = it.lastOrNull()
 
-                        DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
+                        if(objectToCorrect != null)
+                            DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
+                        else
+                            DomainObject("incorrectMessage" + eventDto.aggregateId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
                     }.flatMap { domainObject ->
                         domainObjectRepository.save(domainObject)
                     }.flatMap {
