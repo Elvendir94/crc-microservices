@@ -44,12 +44,12 @@ repositories {
 tasks.withType<KotlinCompile> {
   compilerOptions {
     freeCompilerArgs.add("-Xjsr305=strict")
-    jvmTarget.set(JvmTarget.JVM_21)
+    jvmTarget.set(JvmTarget.JVM_17)
   }
 }
 
 tasks.getByName<Jar>("jar") { enabled = false }
 
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_17
 
-java.targetCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_17

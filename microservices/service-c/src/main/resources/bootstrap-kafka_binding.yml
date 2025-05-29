@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        microserviceAResponseConsumerInput-in-0:
+          destination: crc_topic_forwarded
+          group: crc-service-c
+          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: microserviceAResponseConsumerInput

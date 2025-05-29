@@ -21,39 +21,37 @@ internal class MicroserviceBResponseConsumer(
     private val objectMapper: ObjectMapper
 ) {
 
-    fun process(): Consumer<Flux<Message<Map<String, Any?>>>> = Consumer { input ->
+    fun process(): Function<Flux<Message<Map<String, Any?>>>, Flux<DomainObject>> = Function { input ->
         input
-            .map { message ->
-                EventDTO(
-                    message.payload["messageId"] as String,
-                    message.payload["aggregateId"] as String,
-                    objectMapper.convertValue<MessageToMicroB>(message.payload),
-                    Instant.now().toEpochMilli()
-                )
-            }
-            .filter { true } // Add any filtering logic if needed
-            .doOnNext {
-                logger.info { "Put some processing here." }
-            }
-            .flatMap { eventDto ->
-                stateStoreRepository.findAll()
-                    .filter { it.aggregateId == eventDto.aggregateId }
-                    .sort { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
-                    .collectList()
-                    .map {
-                        // Merge events from list into single event (based on business logic)
-                        val objectToCorrect = it.last()
-
-                        DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
-                    }.flatMap { domainObject ->
-                        domainObjectRepository.save(domainObject) // TODO: Moved to README.adoc in root dir
-                    }.flatMap {
-                        stateStoreRepository.save(eventDto)
-                    }
-            }
-            .doOnNext {
-                logger.info { "Fixed values for fieldA and fieldB. New values ${it.eventBody.fieldA} | ${it.eventBody.fieldB}" }
-            }.subscribe()
+                .map { message ->
+                    EventDTO(
+                            message.payload["messageId"] as String,
+                            message.payload["aggregateId"] as String,
+                            objectMapper.convertValue<MessageToMicroB>(message.payload),
+                            Instant.now().toEpochMilli()
+                    )
+                }
+                .flatMap { eventDto ->
+                    stateStoreRepository.findAll()
+                            .filter { it.aggregateId == eventDto.aggregateId }
+                            .sort { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
+                            .collectList()
+                            .map { events ->
+                                val lastEvent = events.last()
+                                DomainObject(
+                                        lastEvent.messageId,
+                                        eventDto.eventBody.fieldA,
+                                        eventDto.eventBody.fieldB
+                                )
+                            }
+                            .flatMap { domainObject ->
+                                stateStoreRepository.save(eventDto)
+                                        .thenReturn(domainObject)
+                            }
+                }
+                .doOnNext {
+                    logger.info { "Fixed values for fieldA and fieldB." }
+                }
     }
 
     companion object : KLogging()
