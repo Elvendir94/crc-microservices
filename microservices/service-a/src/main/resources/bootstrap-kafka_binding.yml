@@ -4,6 +4,10 @@ spring:
       bindings:
         microserviceBResponse-in-0:
           destination: crc_topic_response
+          group: crc-service-c
+          binder: kafka-crc
+        microserviceBResponse-out-0:
+          destination: crc_topic_to_save
           group: crc-service-a
           binder: kafka-crc
         webRequest-in-0:
