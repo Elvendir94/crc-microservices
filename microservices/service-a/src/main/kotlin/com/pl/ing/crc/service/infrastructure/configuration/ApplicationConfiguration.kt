@@ -28,9 +28,9 @@ internal class ApplicationConfiguration {
 
     @Bean
     fun microserviceBResponse(
-        microserviceBResponseConsumer: MicroserviceBResponseProcess
+        MicroserviceBResponseProcess: MicroserviceBResponseProcess
     ): Function<Flux<Message<Map<String, Any?>>>, Flux<MessageToMicroC>> {
-        return microserviceBResponseConsumer.process()
+        return MicroserviceBResponseProcess.process()
     }
 
     @Bean

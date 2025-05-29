@@ -20,6 +20,9 @@ internal class MicroserviceARequestConsumer(
 ) {
     fun process(): Consumer<Flux<Message<Map<String, Any?>>>> = Consumer { input ->
         input
+            .doOnNext {
+                logger.info { "Received message from kafka from service-a" }
+            }
             .map { message ->
                 EventDTO(
                     message.payload["messageId"] as String,
@@ -27,6 +30,10 @@ internal class MicroserviceARequestConsumer(
                     objectMapper.convertValue<MessageFromMicroA>(message.payload),
                     Instant.now().toEpochMilli()
                 )
+            }.doOnNext {
+                logger.info {
+                    "EventDTO: messageId: ${it.messageId}, aggregateId: ${it.aggregateId}, fieldA: ${it.eventBody.fieldA}, ${it.eventBody.fieldB}"
+                }
             }
             .filter { true }
             .flatMap { eventDto ->

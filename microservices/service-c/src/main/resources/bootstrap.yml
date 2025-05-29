@@ -1,6 +1,6 @@
 spring:
   application:
-    name: crc-service-a
+    name: crc-service-c
   cloud:
     stream:
       kafka:

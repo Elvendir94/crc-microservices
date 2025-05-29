@@ -54,6 +54,9 @@ internal class MicroserviceBResponseProcess(
             .doOnNext {
                 logger.info { "Fixed values for fieldA and fieldB. New values ${it.fieldA} | ${it.fieldB}" }
             }
+            .doOnNext {
+                logger.info("Send to service-c ${it.fieldA}, ${it.fieldB}")
+            }
     }
 
     companion object : KLogging()
