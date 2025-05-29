@@ -2,7 +2,7 @@ spring:
   cloud:
     stream:
       bindings:
-        microserviceARequest-in-0:
+        microserviceAResponse-in-0:
           destination: crc_topic
           group: crc-service-c
           binder: kafka-crc
