@@ -26,7 +26,7 @@ internal class MicroserviceAProcessor(
                                 objectMapper.convertValue<MessageFromMicroA>(message.payload),
                                 Instant.now().toEpochMilli())
         }
-        .filter { true } // Add any filtering logic if needed
+        .filter { true }
         .doOnNext {
             logger.info { "Put some processing here." }
         }
