@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        serviceADomainObject-in-0:
+          destination: crc_topic_domain_object
+          group: crc-service-c
+          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: serviceADomainObject

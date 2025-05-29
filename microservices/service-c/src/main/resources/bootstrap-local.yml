@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    stream:
+      binders:
+        kafka-crc:
+          type: kafka
+          environment:
+            spring.cloud.stream.kafka.binder:
+              consumer-properties.key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+              consumer-properties.auto.offset.reset: latest
+              producer-properties.key.serializer: org.apache.kafka.common.serialization.StringSerializer
+              brokers: localhost:9092
+  elasticsearch:
+    uris: localhost:9200
+    username: nouser
+    password: nopass
