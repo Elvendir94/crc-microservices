@@ -25,17 +25,17 @@ internal class WebRequestProcessor(
                 Instant.now().toEpochMilli()
             )
         }
-            .filter { true } // Add any filtering logic if needed
-            .doOnNext {
-                logger.info { "Put some processing here." }
-            }
-            .flatMap {
-                stateStoreRepository.save(it)
-            }.map {
-                it.eventBody
-            }.doOnNext {
-                logger.info { "Sending message to micro B" }
-            }
+        .filter { true }
+        .doOnNext {
+            logger.info { "Put some processing here." }
+        }
+        .flatMap {
+            stateStoreRepository.save(it)
+        }.map {
+            it.eventBody
+        }.doOnNext {
+            logger.info { "Sending message to micro B" }
+        }
     }
 
     companion object : KLogging()

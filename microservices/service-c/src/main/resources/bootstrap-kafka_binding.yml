@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        microserviceAResponse-in-0:
+          destination: crc_topic
+          group: crc-service-c
+          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: microserviceAResponse
