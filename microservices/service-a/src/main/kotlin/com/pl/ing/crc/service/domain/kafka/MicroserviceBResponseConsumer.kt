@@ -20,41 +20,30 @@ internal class MicroserviceBResponseConsumer(
     private val domainObjectRepository: DomainObjectRepository,
     private val objectMapper: ObjectMapper
 ) {
-
-    fun process(): Consumer<Flux<Message<Map<String, Any?>>>> = Consumer { input ->
+    fun process(): Function<Flux<Message<Map<String, Any?>>>, Flux<DomainObject>> = Function { input ->
         input
             .map { message ->
                 EventDTO(
                     message.payload["messageId"] as String,
                     message.payload["aggregateId"] as String,
-                    objectMapper.convertValue<MessageToMicroB>(message.payload),
+                    objectMapper.convertValue(message.payload, MessageToMicroB::class.java),
                     Instant.now().toEpochMilli()
                 )
-            }
-            .filter { true } // Add any filtering logic if needed
-            .doOnNext {
-                logger.info { "Put some processing here." }
             }
             .flatMap { eventDto ->
                 stateStoreRepository.findAll()
                     .filter { it.aggregateId == eventDto.aggregateId }
                     .sort { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
                     .collectList()
-                    .map {
-                        // Merge events from list into single event (based on business logic)
-                        val objectToCorrect = it.last()
-
-                        DomainObject(objectToCorrect.messageId, eventDto.eventBody.fieldA, eventDto.eventBody.fieldB)
-                    }.flatMap { domainObject ->
-                        domainObjectRepository.save(domainObject) // TODO: Moved to README.adoc in root dir
-                    }.flatMap {
-                        stateStoreRepository.save(eventDto)
+                    .map { events ->
+                        val objectToCorrect = events.last()
+                        DomainObject(
+                            objectToCorrect.messageId,
+                            eventDto.eventBody.fieldA,
+                            eventDto.eventBody.fieldB
+                        )
                     }
             }
-            .doOnNext {
-                logger.info { "Fixed values for fieldA and fieldB. New values ${it.eventBody.fieldA} | ${it.eventBody.fieldB}" }
-            }.subscribe()
     }
-
     companion object : KLogging()
 }

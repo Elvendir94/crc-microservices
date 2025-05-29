@@ -7,6 +7,7 @@ import com.pl.ing.crc.service.domain.kafka.WebRequestProcessor
 import com.pl.ing.crc.service.domain.model.kafka.MessageToMicroB
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.DomainObjectRepository
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.StateStoreRepository
+import com.pl.ing.crc.service.domain.model.elasticsearch.DomainObject
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.Message
@@ -29,7 +30,7 @@ internal class ApplicationConfiguration {
     @Bean
     fun microserviceBResponse(
         microserviceBResponseConsumer: MicroserviceBResponseConsumer
-    ): Consumer<Flux<Message<Map<String, Any?>>>> {
+    ): Function<Flux<Message<Map<String, Any?>>>, Flux<DomainObject>> {
         return microserviceBResponseConsumer.process()
     }
 

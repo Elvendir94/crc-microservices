@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        microserviceASaveRequest-in-0:
+          destination: crc_topic_save_request
+          group: crc-service-c
+          binder: kafka-crc
+#        webRequest-in-0:
+#          destination: crc_topic_web_request
+#          group: crc-service-c
+#          binder: kafka-crc
+#        webRequest-out-0:
+#          destination: crc_topic
+#          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: microserviceASaveRequest
+#      ;webRequest
