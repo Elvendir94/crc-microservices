@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  service-a:
+    build:
+      context: ./microservices/service-a
+      dockerfile: Dockerfile
+    image: service-a:latest
+    container_name: service-a
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local,kafka_binding
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  service-b:
+    build:
+      context: ./microservices/service-b
+      dockerfile: Dockerfile
+    image: service-b:latest
+    container_name: service-b
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local,kafka_binding
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  service-c:
+    build:
+      context: ./microservices/service-c
+      dockerfile: Dockerfile
+    image: service-c:latest
+    container_name: service-c
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local,kafka_binding
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3'
+    ports:
+      - '2181:2181'
+    volumes:
+      - 'zookeeper_data:/bitnami'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    container_name: 'zookeeper'
+    networks:
+      - backend
+
+  kafka:
+    image: 'bitnami/kafka:2'
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    volumes:
+      - 'kafka_data:/bitnami'
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+    depends_on:
+      - zookeeper
+    container_name: 'kafka'
+    networks:
+      - backend
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=test
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - backend
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - backend
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+  elasticsearch-data:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge

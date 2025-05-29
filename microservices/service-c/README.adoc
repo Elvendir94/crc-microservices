@@ -1,0 +1,11 @@
+== About this service
+
+== Important class description:
+
+== Kafka topics:
+
+== Cassandra tables:
+
+== Elasticsearch indices:
+
+== Important logic
