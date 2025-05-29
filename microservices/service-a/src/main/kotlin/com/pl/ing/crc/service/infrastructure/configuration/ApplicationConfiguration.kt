@@ -2,8 +2,10 @@ package com.pl.ing.crc.service.infrastructure.configuration
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.pl.ing.crc.service.domain.kafka.DomainObjectProcessor
 import com.pl.ing.crc.service.domain.kafka.MicroserviceBResponseConsumer
 import com.pl.ing.crc.service.domain.kafka.WebRequestProcessor
+import com.pl.ing.crc.service.domain.model.elasticsearch.DomainObject
 import com.pl.ing.crc.service.domain.model.kafka.MessageToMicroB
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.DomainObjectRepository
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.StateStoreRepository
@@ -18,33 +20,17 @@ import java.util.function.Function
 internal class ApplicationConfiguration {
 
     @Bean
-    fun microserviceBResponseConsumer(
-        stateStoreRepository: StateStoreRepository,
-        domainObjectRepository: DomainObjectRepository,
-        objectMapper: ObjectMapper
-    ): MicroserviceBResponseConsumer {
-        return MicroserviceBResponseConsumer(stateStoreRepository, domainObjectRepository, objectMapper)
-    }
-
-    @Bean
-    fun microserviceBResponse(
-        microserviceBResponseConsumer: MicroserviceBResponseConsumer
-    ): Consumer<Flux<Message<Map<String, Any?>>>> {
-        return microserviceBResponseConsumer.process()
-    }
-
-    @Bean
-    fun webRequestProcessor(
+    fun domainObjectProcessor(
         stateStoreRepository: StateStoreRepository,
         objectMapper: ObjectMapper
-    ): WebRequestProcessor {
-        return WebRequestProcessor(stateStoreRepository, objectMapper)
+    ): DomainObjectProcessor {
+        return DomainObjectProcessor(stateStoreRepository, objectMapper)
     }
 
     @Bean
-    fun webRequest(
-        webRequestProcessor: WebRequestProcessor
-    ): Function<Flux<Message<Map<String, Any?>>>, Flux<MessageToMicroB>> {
-        return webRequestProcessor.process()
+    fun processDomainObject(
+        domainObjectProcessor: DomainObjectProcessor
+    ): Function<Flux<Message<Map<String, Any?>>>, Flux<Message<DomainObject>>> {
+        return domainObjectProcessor
     }
 }
