@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        saveDomainObjectProcessor-in-0:
+          destination: service-a-to-service-c
+          group: crc-service-c
+          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: saveDomainObjectProcessor
