@@ -3,7 +3,7 @@
 ** each microservice is storing events in state store
 ** user is sending event with incorrect values to service-a
 ** service-a is correcting the values using service-b
-** service-c should send the event to service-c which saves domain object with correct values
+** service-a should send the event to service-c which saves domain object with correct values
 
 == How to build all microservices?
 * gradlew clean build in root project dir
