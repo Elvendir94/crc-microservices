@@ -6,34 +6,36 @@ import com.pl.ing.crc.service.domain.model.elasticsearch.EventDTO
 import com.pl.ing.crc.service.domain.model.kafka.MessageToMicroB
 import com.pl.ing.crc.service.domain.repositories.elasticsearch.StateStoreRepository
 import mu.KLogging
-import org.springframework.messaging.Message
 import reactor.core.publisher.Flux
-import java.time.Instant
 import java.util.function.Function
+import org.springframework.messaging.Message
+import java.time.Instant
 
 internal class WebRequestProcessor(
-    private val stateStoreRepository: StateStoreRepository,
+    private val stateStoreRespository: StateStoreRepository,
     private val objectMapper: ObjectMapper
 ) {
-
     fun process(): Function<Flux<Message<Map<String, Any?>>>, Flux<MessageToMicroB>> = Function { input ->
-        input.map { message ->
-            EventDTO(
-                message.payload["messageId"] as String,
-                message.payload["aggregateId"] as String,
-                objectMapper.convertValue<MessageToMicroB>(message.payload),
-                Instant.now().toEpochMilli()
+        input.map {
+            message ->
+                EventDTO(
+                    message.payload["messageId"] as String,
+                    message.payload["aggregateId"] as String,
+                    objectMapper.convertValue<MessageToMicroB>(message.payload),
+                    Instant.now().toEpochMilli()
             )
         }
-            .filter { true } // Add any filtering logic if needed
-            .doOnNext {
+            .filter { true }
+            .doOnNext{
                 logger.info { "Put some processing here." }
             }
             .flatMap {
-                stateStoreRepository.save(it)
-            }.map {
+                stateStoreRespository.save(it)
+            }
+            .map {
                 it.eventBody
-            }.doOnNext {
+            }
+            .doOnNext {
                 logger.info { "Sending message to micro B" }
             }
     }

@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        microserviceAConsumer-in-0:
+          destination: crc_domain_topic
+          group: crc-service-c
+          binder: kafka-crc
+      default-binder: kafka-crc
+    function:
+      definition: microserviceARequest
